@@ -1,0 +1,178 @@
+App.js
+
+
+// In App.js in a new project
+import * as React from 'react';
+import {Button, View, Text } from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+// import Icon from 'react-native-vector-icons/FontAwesome
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import HomeScreen from './src/containers/HomeScreen'
+import Settings from './src/containers/Settings'
+
+function ProfileScreen({navigation}) {
+  return (
+    <View>
+      <Text>Welcome to profile</Text>
+      <Button title="Go back to home" onPress={() => navigation.goBack()} />
+    </View>
+  );
+}
+
+
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+function MyStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        option={{
+          headerShow: false,
+        }}
+      />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+    </Stack.Navigator>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+        initialRouteName="HomeTab"
+        screenOptions={({route}) => ({
+          tabBarIcon: ({focused, color, size}) => {
+            let iconName;
+            if (route.name === 'HomeTab') {
+              iconName = focused ? 'home' : 'home';
+            } else if (route.name === 'SettingsTab') {
+              iconName = focused ? 'settings' : 'settings';
+            }
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+        ScreenOptions={{
+          tabBarActiveTintColor: 'tomato',
+          tabBarInactiveTintColor: 'gray',
+          tabBarLabelStyle: { paddingBottom: 10, fontSize: 10 },
+         tabBarStyle: { padding: 10, height: 5 },
+        }}
+      >
+        <Tab.Screen
+          name="HomeTab"
+          component={MyStack}
+          options={{
+            title: 'My home',
+            headerStyle: {
+              backgroundColor: '#f4511e',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: '400',
+            },
+            headerRight: () => (
+              <Button
+                onPress={() => alert('Massa c_est mm pas fini!')}
+                title="Info"
+                color="blue"
+              />
+            ),
+            headerShadowVisible: false,
+            
+            // headerShow: false,
+             tabBarBadge: 3,
+          }}
+        />
+        <Tab.Screen
+          name="SettingsTab"
+          component={Settings}
+          options={{
+            tabBarBadge: 1,
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
+
+
+
+HomeScreen.js
+
+import React from 'react';
+import { View, Text, StyleSheet, Button, } from 'react-native';
+
+
+function HomeScreen({navigation}) {
+  return (
+    <View style={styles.home}>
+      <Text>Home Screen</Text>
+      <Button
+        title="To Profile"
+        onPress={() => navigation.navigate('Profile')}
+      />
+    </View>
+  );
+}
+
+export default HomeScreen;
+
+const styles= StyleSheet.create ({
+  home:{
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+ 
+})
+
+
+setting.js
+
+import React from 'react';
+import { View, Text, StyleSheet, Button, } from 'react-native';
+
+
+function Settings({navigation}) {
+  return (
+    <View style={styles.settings}>
+      <Text>Settings</Text>
+
+      <View style ={styles.button}>
+        {/* <Button
+          title="Go to Details... again"
+          onPress={() => navigation.push('Settings')}
+        /> */}
+
+        <Button
+          title="Go back to home"
+          onPress={() => {
+            // console.log('pressed');
+            navigation.goBack()
+          }}
+        />
+        <Button
+        title="To Profile"
+        onPress={() => navigation.navigate('Profile')}
+      />
+      </View>
+    </View>
+  );
+}
+const styles = StyleSheet.create({
+  settings: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    Color: 'yellow',
+  },
+})
+
+export default Settings;
